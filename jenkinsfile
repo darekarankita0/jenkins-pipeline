@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('install dependencies') {
             steps {
-                sh 'pip3 install --user pipenv'
+                sh 'sudo apt install pipenv'
                 sh '/bitnami/jenkins/home/ ./local/bin/pipenv --rm || exit 0'
                 sh '/bitnami/jenkins/home/ ./local/bin/pipenv install'
 
