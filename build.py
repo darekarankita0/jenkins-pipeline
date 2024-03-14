@@ -1,18 +1,9 @@
 # build.py
 
-from pyspark.sql import SparkSession
-
-def calculate_sum(spark, numbers):
-    df = spark.createDataFrame(numbers, ["number"])
-    return df.groupBy().sum().collect()[0][0]
+def calculate_sum(numbers):
+    return sum(numbers)
 
 if __name__ == "__main__":
-    spark = SparkSession.builder \
-        .appName("SumCalculator") \
-        .getOrCreate()
-
-    numbers = [(1,), (2,), (3,), (4,), (5,)]
-    total_sum = calculate_sum(spark, numbers)
+    numbers = [1, 2, 3, 4, 5]
+    total_sum = calculate_sum(numbers)
     print("Total sum:", total_sum)
-
-    spark.stop()
