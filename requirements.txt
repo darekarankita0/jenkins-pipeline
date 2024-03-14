@@ -1,1 +1,1 @@
-apt install python2-pyspark==3.2.0
+apt install python3-pyspark
