@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'python test.py'
+            }
+        }
+        
+        stage('Package') {
+            steps {
+                sh 'python package.py'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'python build.py'
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'This stage runs regardless of success or failure.'
+        }
+        
+        success {
+            echo 'All stages completed successfully!'
+        }
+        
+        failure {
+            echo 'Pipeline failed :('
+        }
+    }
+}
