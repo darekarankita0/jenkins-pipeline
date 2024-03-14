@@ -1,9 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        LABS = credentials('labcreds')
-    }
 
     stages {
         stage('Build') {
@@ -23,7 +20,7 @@ pipeline {
         
         stage('Deploy') {
             steps {
-               sh 'sshpass -p $LABS_PSW scp -o StrictHostKeyChecking=no -r . $LABS_USR@g01.itversity.com:/home/itv007922/jenkinsproj'
+               echo 'deploy'
             }
         }
 	
