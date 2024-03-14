@@ -1,45 +1,31 @@
 pipeline {
     agent any
-    
+
+    environment {
+        LABS = credentials('labcreds')
+    }
+
     stages {
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
-                sh 'pip3 install --user pipenv'
-                sh '/bitnami/jenkins/home/ ./local/bin/pipenv --rm || exit 0'
-                sh '/bitnami/jenkins/home/ ./local/bin/pipenv install'
+               sh 'pip3 install --user pipenv'
+               sh '/bitnami/jenkins/home/.local/bin/pipenv --rm || exit 0'
+               sh '/bitnami/jenkins/home/.local/bin/pipenv install'
             }
         }
 
-        stage('Test') {
+
+         stage('Package') {
             steps {
-                sh 'python test.py'
+               sh 'zip -r jenkinsproj.zip .'
             }
         }
         
-        stage('Package') {
+        stage('Deploy') {
             steps {
-                sh 'python package.py'
+               sh 'sshpass -p $LABS_PSW scp -o StrictHostKeyChecking=no -r . $LABS_USR@g01.itversity.com:/home/itv007922/jenkinsproj'
             }
         }
-        
-        stage('Build') {
-            steps {
-                sh 'python build.py'
-            }
-        }
-    }
-    
-    post {
-        always {
-            echo 'This stage runs regardless of success or failure.'
-        }
-        
-        success {
-            echo 'All stages completed successfully!'
-        }
-        
-        failure {
-            echo 'Pipeline failed :('
-        }
+	
     }
 }
